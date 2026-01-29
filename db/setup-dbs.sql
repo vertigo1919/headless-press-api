@@ -1,5 +1,5 @@
-DROP DATABASE IF EXISTS nc_news;
-CREATE DATABASE nc_news;
+DROP DATABASE IF EXISTS headless_press;
+CREATE DATABASE headless_press;
 
-DROP DATABASE IF EXISTS nc_news_test;
-CREATE DATABASE nc_news_test;
+DROP DATABASE IF EXISTS headless_press_test;
+CREATE DATABASE headless_press_test;
