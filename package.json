@@ -1,7 +1,7 @@
 {
-  "name": "be-nc-news",
+  "name": "headless-press-api",
   "version": "1.0.0",
-  "description": "bc-nc-news",
+  "description": "A RESTful headless CMS service for social publishing, built with Node.js and PostgreSQL.",
   "main": "listen.js",
   "scripts": {
     "setup-dbs": "psql -f ./db/setup-dbs.sql",
@@ -13,15 +13,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/northcoders/be-nc-news.git"
+    "url": "git+https://github.com/vertigo1919/headless-press-api.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/northcoders/be-nc-news/issues"
-  },
-  "homepage": "https://github.com/northcoders/be-nc-news#readme",
   "devDependencies": {
     "husky": "^8.0.2",
     "jest": "^27.5.1",
@@ -31,7 +27,7 @@
     "dotenv": "^16.4.7",
     "pg": "^8.13.3"
   },
-   "jest": {
+  "jest": {
     "setupFilesAfterEnv": [
       "jest-extended/all"
     ]
