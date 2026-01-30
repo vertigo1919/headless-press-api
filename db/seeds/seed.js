@@ -21,7 +21,7 @@ until their FKs have the PKs to validate against*/
     `CREATE TABLE users (
       username VARCHAR NOT NULL, 
       name VARCHAR NOT NULL, 
-      avatar_url VARCHAR, 
+      avatar_url VARCHAR(1000), 
       CONSTRAINT pk_users PRIMARY KEY (username));`
   );
 
@@ -30,7 +30,7 @@ until their FKs have the PKs to validate against*/
     `CREATE TABLE topics (
       slug VARCHAR, 
       description VARCHAR NOT NULL, 
-      img_url VARCHAR, 
+      img_url VARCHAR(1000), 
       CONSTRAINT pk_slug PRIMARY KEY (slug));`
   );
 
@@ -44,10 +44,10 @@ until their FKs have the PKs to validate against*/
       body TEXT NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       votes INT DEFAULT 0,
-      article_img_url VARCHAR,
+      article_img_url VARCHAR(1000),
       CONSTRAINT pk_article_id PRIMARY KEY (article_id),
       CONSTRAINT fk_topic FOREIGN KEY (topic) REFERENCES topics(slug),
-      CONSTRAINT fk_author FOREIGN KEY (author) REFERENCES users(username));`
+      CONSTRAINT fk_articles_author FOREIGN KEY (author) REFERENCES users(username));`
   );
 
   await db.query(
@@ -61,7 +61,7 @@ until their FKs have the PKs to validate against*/
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
       CONSTRAINT pk_comment_id PRIMARY KEY (comment_id),
       CONSTRAINT fk_article_id FOREIGN KEY (article_id) REFERENCES articles(article_id),
-      CONSTRAINT fk_author FOREIGN KEY (author) REFERENCES users(username));`
+      CONSTRAINT fk_comment_author FOREIGN KEY (author) REFERENCES users(username));`
   );
 };
 
