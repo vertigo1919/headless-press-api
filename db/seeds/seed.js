@@ -1,4 +1,6 @@
 const db = require("../connection");
+const format = require("pg-format");
+const { mapToNestedArray } = require("./utils");
 
 const seed = async ({ topicData, userData, articleData, commentData }) => {
   /*STEP 1
@@ -63,6 +65,28 @@ until their FKs have the PKs to validate against*/
       CONSTRAINT fk_article_id FOREIGN KEY (article_id) REFERENCES articles(article_id),
       CONSTRAINT fk_comment_author FOREIGN KEY (author) REFERENCES users(username));`
   );
+
+  /*STEP 3
+INSERTION*/
+
+  // 1- USERS TABLE
+
+  // delete any pre-existing data
+
+  // prep the data in pg-format friendly format
+  const usersValuesArray = mapToNestedArray(userData, [
+    "username",
+    "name",
+    "avatar_url",
+  ]);
+
+  // generate the SQL string
+  const insertUserSQL = format(
+    "INSERT INTO users (username, name, avatar_url) VALUES %L",
+    usersValuesArray
+  );
+  // run the SQL code
+  await db.query(insertUserSQL);
 };
 
 module.exports = seed;
