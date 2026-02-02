@@ -1,6 +1,6 @@
 const db = require("../connection");
 const format = require("pg-format");
-const { mapToNestedArray } = require("./utils");
+const { mapToNestedArray, convertDateToISOString } = require("./utils");
 
 const seed = async ({ topicData, userData, articleData, commentData }) => {
   /*STEP 1
@@ -71,7 +71,7 @@ INSERTION*/
 
   // 1- USERS TABLE
 
-  // delete any pre-existing data
+  // delete any pre-existing data? we are already deleting tables in this file so no need.
 
   // prep the data in pg-format friendly format
   const usersValuesArray = mapToNestedArray(userData, [
@@ -87,6 +87,53 @@ INSERTION*/
   );
   // run the SQL code
   await db.query(insertUserSQL);
+
+  // 2 - TOPICS TABLE
+
+  // prep the data in pg-format friendly format
+  const topicsValuesArray = mapToNestedArray(topicData, [
+    "slug",
+    "description",
+    "img_url",
+  ]);
+
+  // generate the SQL string
+  const insertTopicsSQL = format(
+    "INSERT INTO topics (slug, description, img_url) VALUES %L",
+    topicsValuesArray
+  );
+
+  // run the SQL code
+  await db.query(insertTopicsSQL);
+
+  // 3 - ARTICLES TABLE
+
+  // convert timestamp to ISO string, no need to clone object because my util function uses the spread operator so alrady creates a new object
+  const formattedArticleData = articleData.map(convertDateToISOString);
+
+  // prep the data in pg-format friendly format
+  const articlesValuesArray = mapToNestedArray(formattedArticleData, [
+    "title",
+    "topic",
+    "author",
+    "body",
+    "created_at",
+    "votes",
+    "article_img_url",
+  ]);
+
+  console.log(articlesValuesArray);
+
+  // generate the SQL string
+  const insertArticlesSQL = format(
+    "INSERT INTO articles (title, topic, author, body, created_at, votes, article_img_url) VALUES %L",
+    articlesValuesArray
+  );
+
+  console.log(insertArticlesSQL);
+
+  // run the SQL code
+  await db.query(insertArticlesSQL);
 };
 
 module.exports = seed;
