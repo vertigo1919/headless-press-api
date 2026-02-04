@@ -11,6 +11,7 @@ function mapToNestedArray(arrayOfObjects, propertiesArray) {
   });
 }
 
+// fixes timestamp format
 convertDateToISOString = ({ created_at, ...otherProperties }) => {
   if (!created_at) return { ...otherProperties };
 
@@ -20,21 +21,11 @@ convertDateToISOString = ({ created_at, ...otherProperties }) => {
   };
 };
 
-module.exports = { mapToNestedArray, convertDateToISOString };
-// quick test
-// let test = [
-//   {
-//     username: "tickle122",
-//     name: "Tom Tickle",
-//     avatar_url:
-//       "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953",
-//   },
-//   {
-//     username: "grumpy19",
-//     name: "Paul Grump",
-//     avatar_url:
-//       "https://vignette.wikia.nocookie.net/mrmen/images/7/78/Mr-Grumpy-3A.PNG/revision/latest?cb=20170707233013",
-//   },
-// ];
-
-// console.log(mapToNestedArray(test, ["username", "name", "avatar_url"]));
+// reduces and array of object to a lookup object based on a key and value
+function createLookupMap(arrayOfObjects, key, value) {
+  return arrayOfObjects.reduce((lookupObject, element) => {
+    lookupObject[element[key]] = element[value];
+    return lookupObject;
+  }, {});
+}
+module.exports = { mapToNestedArray, convertDateToISOString, createLookupMap };

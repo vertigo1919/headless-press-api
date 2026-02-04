@@ -1,6 +1,11 @@
 const db = require("../connection");
 const format = require("pg-format");
-const { mapToNestedArray, convertDateToISOString } = require("./utils");
+const {
+  mapToNestedArray,
+  convertDateToISOString,
+  createLookupMap,
+} = require("./utils");
+const comments = require("../data/development-data/comments");
 
 const seed = async ({ topicData, userData, articleData, commentData }) => {
   /*STEP 1
@@ -107,7 +112,6 @@ INSERTION*/
   await db.query(insertTopicsSQL);
 
   // 3 - ARTICLES TABLE
-
   // convert timestamp to ISO string, no need to clone object because my util function uses the spread operator so alrady creates a new object
   const formattedArticleData = articleData.map(convertDateToISOString);
 
@@ -122,18 +126,54 @@ INSERTION*/
     "article_img_url",
   ]);
 
-  console.log(articlesValuesArray);
-
   // generate the SQL string
   const insertArticlesSQL = format(
     "INSERT INTO articles (title, topic, author, body, created_at, votes, article_img_url) VALUES %L",
     articlesValuesArray
   );
 
-  console.log(insertArticlesSQL);
-
   // run the SQL code
   await db.query(insertArticlesSQL);
+
+  // 4 - COMMENTS TABLE
+
+  // sort timestamp
+  const formattedCommentsData = commentData.map(convertDateToISOString);
+
+  // create array of array
+  const commentsValuesArray = mapToNestedArray(formattedCommentsData, [
+    "article_title",
+    "body",
+    "votes",
+    "author",
+    "created_at",
+  ]);
+
+  //create look-up object to associate article title to article id - like a dictionary
+  // we want to reduce an array of objects (the rows of articles) to a single lookup object with the format
+  // title:title_id > my util lookup does this
+
+  const articleRows = (await db.query("SELECT * FROM articles")).rows;
+
+  const articlesLookUpObject = createLookupMap(
+    articleRows,
+    "title",
+    "article_id"
+  );
+
+  // swap article_title with article_id
+  commentsValuesArray.forEach(
+    (element) => (element[0] = articlesLookUpObject[element[0]])
+  );
+
+  // generate the SQL string
+  const insertCommentsSQL = format(
+    "INSERT INTO comments (article_id, body, votes, author, created_at) VALUES %L",
+    commentsValuesArray
+  );
+
+  // run the SQL code
+  await db.query(insertCommentsSQL);
 };
 
 module.exports = seed;
