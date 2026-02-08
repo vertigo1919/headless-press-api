@@ -2,4 +2,4 @@
 
 TBC
 
-![Database ERD](./assets/erd.png)
+![Database ERD](./assets/ERD.png)
