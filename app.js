@@ -13,6 +13,12 @@ const { deleteComment } = require("./controllers/comments.controllers");
 
 app.use(express.json());
 
+const endpointsJson = require("./endpoints.json");
+
+app.get("/api", (req, res) => {
+  res.status(200).send({ endpoints: endpointsJson });
+});
+
 // Topics
 app.get("/api/topics", getTopics);
 
@@ -32,7 +38,7 @@ app.delete("/api/comments/:comment_id", deleteComment);
 // errors
 
 // 404
-app.all("*", (req, res) => {
+app.use((req, res) => {
   res.status(404).send({ msg: "Path not found" });
 });
 
