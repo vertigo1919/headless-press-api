@@ -9,7 +9,9 @@
     "test": "jest --runInBand",
     "prepare": "husky install",
     "start": "node listen.js",
-    "test-seed": "jest seed.test.js"
+    "test-seed": "jest seed.test.js",
+    "npm run dev": "nodemon listen.js"
+    
   },
   "repository": {
     "type": "git",
@@ -22,10 +24,13 @@
     "husky": "^8.0.2",
     "jest": "^30.2.0",
     "jest-extended": "^2.0.0",
-    "pg-format": "^1.0.4"
+    "nodemon": "^3.1.11",
+    "pg-format": "^1.0.4",
+    "supertest": "^7.2.2"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
+    "express": "^5.2.1",
     "pg": "^8.13.3"
   },
   "jest": {
