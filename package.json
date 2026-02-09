@@ -10,8 +10,7 @@
     "prepare": "husky install",
     "start": "node listen.js",
     "test-seed": "jest seed.test.js",
-    "npm run dev": "nodemon listen.js"
-    
+    "dev": "nodemon listen.js"
   },
   "repository": {
     "type": "git",
