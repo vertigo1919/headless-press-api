@@ -24,7 +24,7 @@
       <h2>Endpoints Available</h2>
 
       <ul>
-        <li>
+        <li class="endpoint-card">
           <h3>GET /api/topics</h3>
           <p>Retrieve a list of all topics.</p>
 
@@ -51,7 +51,7 @@
 </pre>
         </li>
 
-        <li>
+        <li class="endpoint-card">
           <h3>GET /api</h3>
           <p>Serves a JSON representation of all available endpoints.</p>
           <h4>Example response:</h4>
@@ -75,7 +75,7 @@
           </pre>
         </li>
 
-        <li>
+        <li class="endpoint-card">
           <h3>GET /api/articles</h3>
           <p>
             Serves an array of all articles. <br />
@@ -103,7 +103,7 @@
           </pre>
         </li>
 
-        <li>
+        <li class="endpoint-card">
           <h3>GET /api/articles/:article_id</h3>
           <p>Serves a single article object by its ID.</p>
           <h4>Example response:</h4>
@@ -126,7 +126,7 @@
           </pre>
         </li>
 
-        <li>
+        <li class="endpoint-card">
           <h3>PATCH /api/articles/:article_id</h3>
           <p>Updates the vote count of an article.</p>
           <h4>Example Request Body:</h4>
@@ -152,7 +152,7 @@
           </pre>
         </li>
 
-        <li>
+        <li class="endpoint-card">
           <h3>GET /api/articles/:article_id/comments</h3>
           <p>Serves an array of comments for the specified article.</p>
           <h4>Example response:</h4>
@@ -173,7 +173,7 @@
           </pre>
         </li>
 
-        <li>
+        <li class="endpoint-card">
           <h3>POST /api/articles/:article_id/comments</h3>
           <p>Adds a new comment to an article.</p>
           <h4>Example Request Body:</h4>
@@ -201,14 +201,14 @@
           </pre>
         </li>
 
-        <li>
+        <li class="endpoint-card">
           <h3>DELETE /api/comments/:comment_id</h3>
           <p>Deletes a comment by its ID.</p>
           <h4>Example response:</h4>
           <p>Status 204: No Content</p>
         </li>
 
-        <li>
+        <li class="endpoint-card">
           <h3>GET /api/users</h3>
           <p>Serves an array of all users.</p>
           <h4>Example response:</h4>
