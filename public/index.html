@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="style.css" />
+
+    <title>Headless Press API</title>
+  </head>
+  <body>
+    <header>
+      <h1>Headless Press API</h1>
+      <p>
+        The Headless Press API is a RESTful backend service built with Node.js
+        and PostgreSQL. It provides programmatic access to
+        <strong>Articles</strong>, <strong>Topics</strong>,
+        <strong>Users</strong>, and <strong>Comments</strong>, enabling social
+        news platform functionality through standard HTTP methods.
+      </p>
+    </header>
+
+    <main>
+      <h2>Endpoints Available</h2>
+
+      <ul>
+        <li>
+          <h3>GET /api/topics</h3>
+          <p>Retrieve a list of all topics.</p>
+
+          <h4>Example response:</h4>
+          <pre>
+<code>
+{
+  "topics": [
+    {
+      "slug": "coding",
+      "description": "Code is love, code is life"
+    },
+    {
+      "slug": "football",
+      "description": "FOOTIE!"
+    },
+    {
+      "slug": "cooking",
+      "description": "Hey good looking, what you got cooking?"
+    }
+  ]
+}
+</code>
+</pre>
+        </li>
+
+        <li>
+          <h3>GET /api</h3>
+          <p>Serves a JSON representation of all available endpoints.</p>
+          <h4>Example response:</h4>
+          <pre>
+<code>
+{
+  "endpoints": {
+    "GET /api": {
+      "description": "serves up a json representation of all the available endpoints of the api"
+    },
+    "GET /api/topics": {
+      "description": "serves an array of all topics",
+      "queries": [],
+      "exampleResponse": {
+        "topics": [{ "slug": "football", "description": "Footie!" }]
+      }
+    }
+  }
+}
+</code>
+          </pre>
+        </li>
+
+        <li>
+          <h3>GET /api/articles</h3>
+          <p>
+            Serves an array of all articles. <br />
+            <strong>Available Queries:</strong> <code>author</code>,
+            <code>topic</code>, <code>sort_by</code>, <code>order</code>.
+          </p>
+          <h4>Example response:</h4>
+          <pre>
+<code>
+{
+  "articles": [
+    {
+      "author": "weegembump",
+      "title": "Seafood substitutions are increasing",
+      "article_id": 1,
+      "topic": "cooking",
+      "created_at": "2018-05-30T15:59:13.341Z",
+      "votes": 0,
+      "article_img_url": "...",
+      "comment_count": 6
+    }
+  ]
+}
+</code>
+          </pre>
+        </li>
+
+        <li>
+          <h3>GET /api/articles/:article_id</h3>
+          <p>Serves a single article object by its ID.</p>
+          <h4>Example response:</h4>
+          <pre>
+<code>
+{
+  "article": {
+    "article_id": 1,
+    "title": "Living in the shadow of a great man",
+    "topic": "mitch",
+    "author": "butter_bridge",
+    "body": "I find this existence challenging",
+    "created_at": "2020-07-09T20:11:00.000Z",
+    "votes": 100,
+    "article_img_url": "...",
+    "comment_count": 11
+  }
+}
+</code>
+          </pre>
+        </li>
+
+        <li>
+          <h3>PATCH /api/articles/:article_id</h3>
+          <p>Updates the vote count of an article.</p>
+          <h4>Example Request Body:</h4>
+          <pre>
+<code>
+{
+  "inc_votes": 1
+}
+</code>
+          </pre>
+          <h4>Example response:</h4>
+          <pre>
+<code>
+{
+  "article": {
+    "article_id": 1,
+    "title": "Living in the shadow of a great man",
+    "votes": 101,
+    ...
+  }
+}
+</code>
+          </pre>
+        </li>
+
+        <li>
+          <h3>GET /api/articles/:article_id/comments</h3>
+          <p>Serves an array of comments for the specified article.</p>
+          <h4>Example response:</h4>
+          <pre>
+<code>
+{
+  "comments": [
+    {
+      "comment_id": 1,
+      "votes": 16,
+      "created_at": "2018-05-30T15:59:13.341Z",
+      "author": "butter_bridge",
+      "body": "The beautiful thing about treasure is that it exists."
+    }
+  ]
+}
+</code>
+          </pre>
+        </li>
+
+        <li>
+          <h3>POST /api/articles/:article_id/comments</h3>
+          <p>Adds a new comment to an article.</p>
+          <h4>Example Request Body:</h4>
+          <pre>
+<code>
+{
+  "username": "butter_bridge",
+  "body": "I didn't know that!"
+}
+</code>
+          </pre>
+          <h4>Example response:</h4>
+          <pre>
+<code>
+{
+  "comment": {
+    "comment_id": 19,
+    "votes": 0,
+    "created_at": "2020-09-19T23:10:59.341Z",
+    "author": "butter_bridge",
+    "body": "I didn't know that!"
+  }
+}
+</code>
+          </pre>
+        </li>
+
+        <li>
+          <h3>DELETE /api/comments/:comment_id</h3>
+          <p>Deletes a comment by its ID.</p>
+          <h4>Example response:</h4>
+          <p>Status 204: No Content</p>
+        </li>
+
+        <li>
+          <h3>GET /api/users</h3>
+          <p>Serves an array of all users.</p>
+          <h4>Example response:</h4>
+          <pre>
+<code>
+{
+  "users": [
+    {
+      "username": "butter_bridge",
+      "name": "jonny",
+      "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+    }
+  ]
+}
+</code>
+          </pre>
+        </li>
+      </ul>
+    </main>
+  </body>
+</html>
