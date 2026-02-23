@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const cors = require("cors");
+
 const { getTopics } = require("./controllers/topics.controllers");
 const {
   getArticles,
@@ -12,8 +14,8 @@ const {
 const { getUsers } = require("./controllers/users.controllers");
 const { deleteComment } = require("./controllers/comments.controllers");
 
+app.use(cors()); // << CORS stands for cross origin resource sharing, it's best placed before any middleware
 app.use(express.json());
-
 app.use(express.static(path.join(__dirname, "public")));
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
