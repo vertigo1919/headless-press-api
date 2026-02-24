@@ -11,7 +11,10 @@ const {
   getCommentsByArticleId,
   postComment,
 } = require("./controllers/articles.controllers");
-const { getUsers } = require("./controllers/users.controllers");
+const {
+  getUsers,
+  getUserByUsername,
+} = require("./controllers/users.controllers");
 const { deleteComment } = require("./controllers/comments.controllers");
 
 app.use(cors()); // << CORS stands for cross origin resource sharing, it's best placed before any middleware
@@ -39,6 +42,7 @@ app.post("/api/articles/:article_id/comments", postComment);
 
 // Users
 app.get("/api/users", getUsers);
+app.get("/api/users/:username", getUserByUsername);
 
 // Comments
 app.delete("/api/comments/:comment_id", deleteComment);
