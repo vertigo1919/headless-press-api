@@ -1,5 +1,4 @@
 module.exports = [
-  { description: "Code is love, code is life", slug: "coding", img_url: "" },
   {
     description: "FOOTIE!",
     slug: "football",
@@ -11,7 +10,7 @@ module.exports = [
     img_url: "https://www.svgrepo.com/show/401342/cooking.svg",
   },
   {
-    description: "We love coding",
+    description: "Code is love, code is life",
     slug: "coding",
     img_url: "https://www.svgrepo.com/show/474334/coding.svg",
   },
