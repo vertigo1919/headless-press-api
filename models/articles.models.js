@@ -23,10 +23,14 @@ exports.selectArticles = (sort_by = "created_at", order = "desc", topic) => {
 
   const queryValues = [];
   let queryStr = `
-    SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, 
-    COUNT(comments.comment_id)::INT AS comment_count 
+    SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, articles.body, 
+    COUNT(comments.comment_id)::INT AS comment_count, 
+    topics.img_url AS topic_img_url,
+      users.avatar_url AS author_avatar_url
     FROM articles 
     LEFT JOIN comments ON articles.article_id = comments.article_id
+    LEFT JOIN topics ON articles.topic = topics.slug
+    LEFT JOIN users ON articles.author = users.username
   `;
 
   if (topic) {
@@ -34,7 +38,7 @@ exports.selectArticles = (sort_by = "created_at", order = "desc", topic) => {
     queryValues.push(topic);
   }
 
-  queryStr += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order};`;
+  queryStr += ` GROUP BY articles.article_id, topics.img_url, users.avatar_url ORDER BY ${sort_by} ${order};`;
 
   const dbQuery = db.query(queryStr, queryValues);
 
@@ -52,11 +56,14 @@ exports.selectArticleById = (article_id) => {
   return db
     .query(
       `
-    SELECT articles.*, COUNT(comments.comment_id)::INT AS comment_count 
+    SELECT articles.*, COUNT(comments.comment_id)::INT AS comment_count, topics.img_url AS topic_img_url,
+    users.avatar_url AS author_avatar_url
     FROM articles 
     LEFT JOIN comments ON articles.article_id = comments.article_id
+    LEFT JOIN topics ON articles.topic = topics.slug
+    LEFT JOIN users ON articles.author = users.username
     WHERE articles.article_id = $1
-    GROUP BY articles.article_id;
+    GROUP BY articles.article_id, topics.img_url, users.avatar_url;
   `,
       [article_id]
     )

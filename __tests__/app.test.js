@@ -58,8 +58,10 @@ describe("GET /api/articles", () => {
             votes: expect.any(Number),
             article_img_url: expect.any(String),
             comment_count: expect.any(Number),
+            body: expect.any(String),
+            topic_img_url: expect.any(String),
+            author_avatar_url: expect.any(String),
           });
-          expect(article).not.toHaveProperty("body");
         });
       });
   });

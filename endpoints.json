@@ -21,7 +21,10 @@
           "body": "Text from the article..",
           "created_at": "2018-05-30T15:59:13.341Z",
           "votes": 0,
-          "comment_count": 6
+          "article_img_url": "https://images.pexels.com/...",
+          "comment_count": 6,
+          "topic_img_url": "https://example.com/cooking-topic.jpg",
+          "author_avatar_url": "https://example.com/gemma-avatar.png"
         }
       ]
     }
@@ -37,7 +40,10 @@
         "body": "I find this existence challenging",
         "created_at": "2020-07-09T20:11:00.000Z",
         "votes": 100,
-        "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+        "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+        "comment_count": 11,
+        "topic_img_url": "https://example.com/mitch-topic.jpg",
+        "author_avatar_url": "https://example.com/jonny-avatar.png"
       }
     }
   },
