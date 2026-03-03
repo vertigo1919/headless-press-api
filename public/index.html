@@ -108,7 +108,10 @@
 
         <li class="endpoint-card">
           <h3>GET /api/articles/:article_id</h3>
-          <p>Serves a single article object by its ID.</p>
+          <p>
+            Serves a single article object by its ID. Optionally accepts a
+            <code>username</code> query to include that user's vote.
+          </p>
           <h4>Example response:</h4>
           <pre>
 <code>
@@ -124,7 +127,8 @@
     "article_img_url": "...",
     "comment_count": 11,
     "topic_img_url": "...",
-    "author_avatar_url": "..."
+    "author_avatar_url": "...",
+    "user_vote": 0
   }
 }
 </code>
@@ -133,14 +137,15 @@
 
         <li class="endpoint-card">
           <h3>PATCH /api/articles/:article_id</h3>
-          <p>Updates the vote count of an article.</p>
+          <p>Updates the vote count of an article for a specific user.</p>
           <h4>Example Request Body:</h4>
           <pre>
 <code>
-{
-  "inc_votes": 1
-}
-</code>
+        {
+          "inc_votes": 1,
+          "username": "butter_bridge"
+        }
+        </code>
           </pre>
           <h4>Example response:</h4>
           <pre>
@@ -149,12 +154,16 @@
   "article": {
     "article_id": 1,
     "title": "Living in the shadow of a great man",
+    "topic": "mitch",
+    "author": "butter_bridge",
+    "body": "I find this existence challenging",
+    "created_at": "2020-07-09T20:11:00.000Z",
     "votes": 101,
-    ...
+    "article_img_url": "..."
   }
 }
 </code>
-          </pre>
+</pre>
         </li>
 
         <li class="endpoint-card">
@@ -229,6 +238,33 @@
   ]
 }
 </code>
+          </pre>
+        </li>
+        <li class="endpoint-card">
+          <h3>PATCH /api/comments/:comment_id</h3>
+          <p>Updates the vote count of a comment for a specific user.</p>
+          <h4>Example Request Body:</h4>
+          <pre>
+        <code>
+        {
+          "inc_votes": 1,
+          "username": "butter_bridge"
+        }
+        </code>
+          </pre>
+          <h4>Example response:</h4>
+          <pre>
+        <code>
+        {
+          "comment": {
+            "comment_id": 1,
+            "votes": 17,
+            "created_at": "2018-05-30T15:59:13.341Z",
+            "author": "butter_bridge",
+            "body": "The beautiful thing about treasure is that it exists."
+          }
+        }
+        </code>
           </pre>
         </li>
 

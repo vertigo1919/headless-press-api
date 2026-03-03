@@ -13,11 +13,16 @@ DROP tables in reverse order to ensure idempotency (in comparison to creation or
 We drop them in reverse because a parent table cannot be deleted while its
 PK is still being referenced by a FK in a child table */
 
-  await db.query(/* SQL */ `
+  await db.query(
+    /* SQL */
+    `DROP TABLE IF EXISTS comment_votes;
+    DROP TABLE IF EXISTS article_votes;
     DROP TABLE IF EXISTS comments;
     DROP TABLE IF EXISTS articles;
     DROP TABLE IF EXISTS topics;
-    DROP TABLE IF EXISTS users;`);
+    DROP TABLE IF EXISTS users;
+    `
+  );
 
   /*STEP 2
 CREATE TABLES starting with parents because children cannot be created
@@ -69,6 +74,29 @@ until their FKs have the PKs to validate against*/
       CONSTRAINT pk_comment_id PRIMARY KEY (comment_id),
       CONSTRAINT fk_article_id FOREIGN KEY (article_id) REFERENCES articles(article_id),
       CONSTRAINT fk_comment_author FOREIGN KEY (author) REFERENCES users(username));`
+  );
+
+  await db.query(
+    /* SQL */
+    `CREATE TABLE comment_votes (
+      username   VARCHAR NOT NULL,
+      comment_id INT     NOT NULL,
+      vote_value INT     NOT NULL CHECK (vote_value IN (-1, 1)),
+      CONSTRAINT pk_comment_votes PRIMARY KEY (username, comment_id),
+      CONSTRAINT fk_comment_vote_user FOREIGN KEY (username) REFERENCES users(username),
+      CONSTRAINT fk_comment_vote_comment FOREIGN KEY (comment_id) REFERENCES comments(comment_id)
+    );`
+  );
+
+  await db.query(
+    /* SQL */
+    `CREATE TABLE article_votes (
+      username VARCHAR NOT NULL,
+      article_id INT NOT NULL,
+      vote_value INT NOT NULL CHECK (vote_value IN (-1, 1)),
+      CONSTRAINT pk_article_votes PRIMARY KEY (username, article_id),
+      CONSTRAINT fk_vote_user FOREIGN KEY (username) REFERENCES users(username),
+      CONSTRAINT fk_vote_article FOREIGN KEY (article_id) REFERENCES articles(article_id));`
   );
 
   /*STEP 3

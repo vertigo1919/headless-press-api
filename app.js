@@ -15,7 +15,10 @@ const {
   getUsers,
   getUserByUsername,
 } = require("./controllers/users.controllers");
-const { deleteComment } = require("./controllers/comments.controllers");
+const {
+  deleteComment,
+  patchComment,
+} = require("./controllers/comments.controllers");
 
 app.use(cors()); // << CORS stands for cross origin resource sharing, it's best placed before any middleware
 app.use(express.json());
@@ -45,8 +48,10 @@ app.get("/api/users", getUsers);
 app.get("/api/users/:username", getUserByUsername);
 
 // Comments
-app.delete("/api/comments/:comment_id", deleteComment);
-
+app
+  .route("/api/comments/:comment_id")
+  .patch(patchComment)
+  .delete(deleteComment);
 // errors
 
 // 404

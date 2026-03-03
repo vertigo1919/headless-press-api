@@ -98,13 +98,15 @@ describe("GET /api/articles", () => {
 });
 
 describe("GET /api/articles/:article_id", () => {
-  test("200: Responds with the article object including comment count", () => {
+  test("200: Responds with the article object including comment count and user_vote", () => {
     return request(app)
-      .get("/api/articles/1")
+      .get("/api/articles/1?username=butter_bridge")
       .expect(200)
       .then(({ body: { article } }) => {
         expect(article.article_id).toBe(1);
         expect(article.comment_count).toBe(11);
+        expect(article).toHaveProperty("user_vote");
+        expect(article.user_vote).toBe(0); // no vote yet for this user
       });
   });
 
@@ -186,14 +188,60 @@ describe("POST /api/articles/:article_id/comments", () => {
 });
 
 describe("PATCH /api/articles/:article_id", () => {
-  test("200: Updates article votes and returns updated article", () => {
-    const voteUpdate = { inc_votes: 1 };
+  test("200: Updates article votes for a first-time upvote and returns updated article", () => {
+    const voteUpdate = { inc_votes: 1, username: "butter_bridge" };
     return request(app)
       .patch("/api/articles/1")
       .send(voteUpdate)
       .expect(200)
       .then(({ body: { article } }) => {
+        expect(article.votes).toBe(101); // 100 in seed + 1
+      });
+  });
+
+  test("200: Un-votes when the same user sends the same direction again", () => {
+    const voteUpdate = { inc_votes: 1, username: "butter_bridge" };
+
+    return request(app)
+      .patch("/api/articles/1")
+      .send(voteUpdate) // 100 -> 101
+      .then(() => {
+        return request(app)
+          .patch("/api/articles/1")
+          .send(voteUpdate) // 101 -> 100
+          .expect(200);
+      })
+      .then(({ body: { article } }) => {
+        expect(article.votes).toBe(100);
+      });
+  });
+
+  test("200: Flips vote correctly (down then up = +2 delta)", () => {
+    const down = { inc_votes: -1, username: "butter_bridge" };
+    const up = { inc_votes: 1, username: "butter_bridge" };
+
+    return request(app)
+      .patch("/api/articles/1")
+      .send(down) // 100 -> 99
+      .then(() => {
+        return request(app)
+          .patch("/api/articles/1")
+          .send(up) // 99 -> 101
+          .expect(200);
+      })
+      .then(({ body: { article } }) => {
         expect(article.votes).toBe(101);
+      });
+  });
+
+  test("400: Responds with error if username is missing", () => {
+    const voteUpdate = { inc_votes: 1 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(voteUpdate)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Missing required field");
       });
   });
 });
@@ -209,6 +257,67 @@ describe("DELETE /api/comments/:comment_id", () => {
       .expect(404)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Comment not found");
+      });
+  });
+});
+
+describe("PATCH /api/comments/:comment_id", () => {
+  test("200: Updates comment votes for a first-time upvote and returns updated comment", () => {
+    const voteUpdate = { inc_votes: 1, username: "butter_bridge" };
+
+    return request(app)
+      .patch("/api/comments/1")
+      .send(voteUpdate)
+      .expect(200)
+      .then(({ body: { comment } }) => {
+        expect(comment.votes).toBe(17); // 16 in test seed + 1
+      });
+  });
+
+  test("200: Un-votes when the same user sends the same direction again", () => {
+    const voteUpdate = { inc_votes: 1, username: "butter_bridge" };
+
+    return request(app)
+      .patch("/api/comments/1")
+      .send(voteUpdate) // 16 -> 17
+      .then(() => {
+        return request(app)
+          .patch("/api/comments/1")
+          .send(voteUpdate) // 17 -> 16
+          .expect(200);
+      })
+      .then(({ body: { comment } }) => {
+        expect(comment.votes).toBe(16);
+      });
+  });
+
+  test("200: Flips vote correctly (down then up = +2 delta)", () => {
+    const down = { inc_votes: -1, username: "butter_bridge" };
+    const up = { inc_votes: 1, username: "butter_bridge" };
+
+    return request(app)
+      .patch("/api/comments/1")
+      .send(down) // 16 -> 15
+      .then(() => {
+        return request(app)
+          .patch("/api/comments/1")
+          .send(up) // 15 -> 17
+          .expect(200);
+      })
+      .then(({ body: { comment } }) => {
+        expect(comment.votes).toBe(17);
+      });
+  });
+
+  test("400: Responds with error if username is missing", () => {
+    const voteUpdate = { inc_votes: 1 };
+
+    return request(app)
+      .patch("/api/comments/1")
+      .send(voteUpdate)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Missing required field");
       });
   });
 });

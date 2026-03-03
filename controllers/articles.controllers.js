@@ -17,20 +17,17 @@ exports.getArticles = (req, res, next) => {
 
 exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params;
-  selectArticleById(article_id)
-    .then((article) => {
-      res.status(200).send({ article });
-    })
+  const { username } = req.query;
+  selectArticleById(article_id, username)
+    .then((article) => res.status(200).send({ article }))
     .catch(next);
 };
 
 exports.patchArticle = (req, res, next) => {
   const { article_id } = req.params;
-  const { inc_votes } = req.body;
-  updateArticle(article_id, inc_votes)
-    .then((article) => {
-      res.status(200).send({ article });
-    })
+  const { inc_votes, username } = req.body;
+  updateArticle(article_id, inc_votes, username)
+    .then((article) => res.status(200).send({ article }))
     .catch(next);
 };
 
