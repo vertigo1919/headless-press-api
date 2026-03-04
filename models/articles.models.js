@@ -138,20 +138,32 @@ exports.updateArticle = async (article_id, inc_votes, username) => {
   return updatedArticleRows[0];
 };
 
-exports.selectCommentsByArticleId = (article_id) => {
-  // Check if article exists first, then fetch comments
+exports.selectCommentsByArticleId = (article_id, username) => {
   return checkExists("articles", "article_id", article_id)
     .then(() => {
       return db.query(
         `
-        SELECT * FROM comments 
-        WHERE article_id = $1 
-        ORDER BY created_at DESC;
+        SELECT 
+          comments.*, 
+          users.avatar_url AS author_avatar_url,
+          cv.vote_value AS user_vote
+        FROM comments 
+        JOIN users ON comments.author = users.username
+        LEFT JOIN comment_votes cv
+          ON cv.comment_id = comments.comment_id
+          AND cv.username = $2
+        WHERE comments.article_id = $1 
+        ORDER BY comments.created_at DESC;
       `,
-        [article_id]
+        [article_id, username]
       );
     })
-    .then(({ rows }) => rows);
+    .then(({ rows }) => {
+      return rows.map((row) => ({
+        ...row,
+        user_vote: row.user_vote ?? 0,
+      }));
+    });
 };
 
 exports.insertComment = (article_id, username, body) => {
