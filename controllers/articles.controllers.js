@@ -34,13 +34,9 @@ exports.patchArticle = (req, res, next) => {
 exports.getCommentsByArticleId = (req, res, next) => {
   const { article_id } = req.params;
   const { username } = req.query;
-  const promises = [
-    selectCommentsByArticleId(article_id, username),
-    selectArticleById(article_id),
-  ];
 
-  Promise.all(promises)
-    .then(([comments]) => {
+  selectCommentsByArticleId(article_id, username)
+    .then((comments) => {
       res.status(200).send({ comments });
     })
     .catch(next);
