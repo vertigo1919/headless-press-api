@@ -34,8 +34,14 @@ app.get("/api", (req, res) => {
 });
 
 //PING
-app.get("/ping", (req, res) => {
-  res.status(200).send("ok");
+app.get("/ping", async (req, res, next) => {
+  try {
+    await db.query("SELECT 1 AS awake");
+
+    res.status(200).send("Render and Supabase are both awake!");
+  } catch (error) {
+    next(error);
+  }
 });
 
 // Topics
