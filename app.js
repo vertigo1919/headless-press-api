@@ -33,6 +33,11 @@ app.get("/api", (req, res) => {
   res.status(200).send({ endpoints: endpointsJson });
 });
 
+//PING
+app.get("/ping", (req, res) => {
+  res.status(200).send("ok");
+});
+
 // Topics
 app.get("/api/topics", getTopics);
 
@@ -52,6 +57,7 @@ app
   .route("/api/comments/:comment_id")
   .patch(patchComment)
   .delete(deleteComment);
+
 // errors
 
 // 404
