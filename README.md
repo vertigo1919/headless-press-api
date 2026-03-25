@@ -1,11 +1,10 @@
 # Headless Press API
 
-A RESTful API built to serve a news aggregation and discussion platform. This project handles data for topics, articles, comments, and users, providing a robust backend for a full-stack application. This API powers **PressIt**, a minimalist Reddit-style news client built with React.
+A RESTful API built to serve a news aggregation and discussion platform. This project handles data for topics, articles, comments, and users, providing a robust backend for a full-stack application. This API powers [**PressIt**](https://pressit-app.netlify.app/), a minimalist Reddit-style news client built with React.
 
-- [🚀 Live API](https://headless-press-api.onrender.com/)
-- [🧠 Backend repo](https://github.com/vertigo1919/headless-press-api)
-- [📰 Frontend repo – PressIt](https://github.com/vertigo1919/pressit)
-- [🌐 Live frontend](https://pressit-app.netlify.app/)
+- [🚀 Headless Press API - Live Demo](https://headless-press-api.onrender.com/)
+- [📰 PressIt - Frontend Repo](https://github.com/vertigo1919/pressit)
+- [🌐 Pressit - Frontend Live Demo](https://pressit-app.netlify.app/)
 
 ## Tech Stack
 
