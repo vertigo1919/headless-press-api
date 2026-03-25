@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const cors = require("cors");
+const db = require("./db/connection");
 
 const { getTopics } = require("./controllers/topics.controllers");
 const {
@@ -37,6 +38,12 @@ app.get("/api", (req, res) => {
 app.get("/ping", async (req, res, next) => {
   try {
     await db.query("SELECT 1 AS awake");
+    await fetch(`${process.env.SUPABASE_URL}/rest/v1/`, {
+      headers: {
+        apikey: process.env.SUPABASE_SERVICE_ROLE_KEY,
+        Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+      },
+    });
 
     res.status(200).send("Render and Supabase are both awake!");
   } catch (error) {
